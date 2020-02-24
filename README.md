@@ -9,7 +9,7 @@ CCGMS v17.2 (c64), Ultimate (c64) no ANSI detected
 Striketerm 2014 (c64) 40 col and 80 col ANSI detected
 
 JR-Comm 1.02a (Amiga) ANSI detected
-Term 4.8 (Amiga) ANSI detected]
+Term 4.8 (Amiga) ANSI detected
 
 iTerm2 Build 3.3.9 (macOS) ANSI detected
 Netrunner 2.00 Beta 18 (Win10, Linux 64) ANSI detected
