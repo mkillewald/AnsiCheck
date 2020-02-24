@@ -1,7 +1,7 @@
 # AnsiCheck v1.1.5
 ### An ANSI detect routine with terminal size detect for C-Net Amiga 5.21b that minimizes stray user input during detection 
 
-Inspired by RIPDetect by Leo Anderson Jr. (Kicker) 15-Nov-95
+Inspired by RIPDetect by Leo Anderson Jr. (Kicker) 15-Nov-95   
 http://aminet.net/package/comm/cnet/RIPdetect
 
 #### This has been tested on the following terminals:
