@@ -17,5 +17,5 @@ RIPtel64 3.1 (Win10) RIP detected
 Syncterm 1.0 (Win10), 1.0b (macOS), 1.1b (Linux 64) ANSI detected   
 
 Use at your own risk. 
-
-#### -X-caliber BBS   [telnet://bbs.aholix.net:6800]
+**************************************************************************
+### -X-caliber BBS   [telnet://bbs.aholix.net:6800]
