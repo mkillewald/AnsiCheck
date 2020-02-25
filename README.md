@@ -5,7 +5,7 @@ Inspired by RIPDetect by Leo Anderson Jr. (Kicker) 15-Nov-95 (http://aminet.net/
 
 #### This has been tested on the following terminals:
 
-&nbsp;&nbsp;&nbsp;&nbsp;CCGMS 17.2 (c64), Ultimate (c64) --no ANSI or size detected :(   
+&nbsp;&nbsp;&nbsp;&nbsp;CCGMS 17.2 (c64), Ultimate (c64) --no ANSI, RIP or size detected :(   
 &nbsp;&nbsp;&nbsp;&nbsp;Striketerm 2014 (c64)   
 
 &nbsp;&nbsp;&nbsp;&nbsp;JR-Comm 1.02a (Amiga)   
