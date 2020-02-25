@@ -16,19 +16,21 @@ parse source . . fp .; df=left(fp,max(lastpos('/',fp),lastpos(':',fp)))
 /*    Inspired by RIPDetect by Leo Anderson Jr. (Kicker) 15-Nov-95        */
 /*    http://aminet.net/package/comm/cnet/RIPdetect                       */
 /*                                                                        */
-/*    This has been tested on the following terminals:                    */
-/*    CCGMS v17.2 (c64), Ultimate (c64) no ANSI detected                  */
-/*    Striketerm 2014 (c64) 40 col and 80 col ANSI detected               */
+/*  This has been tested on the following terminals:                      */
+/*    CCGMS 17.2 (c64), Ultimate (c64) [no ANSI or size detected]         */
+/*    Striketerm 2014 (c64)                                               */
 /*                                                                        */
-/*    JR-Comm 1.02a (Amiga) ANSI detected                                 */
-/*    Term 4.8 (Amiga) ANSI detected                                      */
+/*    JR-Comm 1.02a (Amiga)                                               */
+/*    Term 4.8 (Amiga)                                                    */
 /*                                                                        */
-/*    iTerm2 Build 3.3.9 (macOS) ANSI detected                            */
-/*    Netrunner 2.00 Beta 18 (Win10, Linux 64) ANSI detected              */
-/*    RIPtel64 3.1 (Win10) RIP detected                                   */
-/*    Syncterm 1.0 (Win10), 1.0b (macOS), 1.1b (Linux 64) ANSI detected   */
+/*    fTelnet (iOS, Android)                                              */
 /*                                                                        */
-/*    Use at your own risk.                                               */
+/*    iTerm2 Build 3.3.9 (macOS)                                          */
+/*    Netrunner 2.00 Beta 18 (Win10, Linux 64)                            */
+/*    RIPtel64 3.1 (Win10)                                                */
+/*    Syncterm 1.0 (Win10), 1.0b (macOS), 1.1b (Linux 64)                 */
+/*                                                                        */
+/*  Use at your own risk.                                                 */
 /*                                                                        */
 /**************************************************************************/
 
@@ -38,79 +40,86 @@ getuser 1109795; localMode=result     /* local mode? */
 if localMode then exit
 
 sendstring cty"f1Ansi/RIP detect..."
-call detectAnsi(askTerm())
-
-noSize:
-transmit cty"f1Terminal size not determined."
-signal bye
-
-noAnsi:
-transmit "Neither Ansi nor RIP found   "
-signal bye
+call detectAnsiRip()
 
 bye:
-bufferflush
-exit
+  bufferflush
+  exit
+
+ripDetected:
+  /* Do RIP stuff here as needed. NOTE: if need access
+     to global variables, expose them in detectAnsiRip() */
+  sendstring "RIP Terminal Detected"
+  signal bye
+
+ansiDetected:
+  /* Do ANSI stuff here as needed. NOTE: if need access to global variables,
+     expose them in detectAnsiRip() */
+  transmit "ANSI Terminal Detected!"
+  sendstring "Detecting Terminal Size..."
+  parse value detectScreen() with . "[" row ";" col "R" .
+  if row=="" | col=="" then signal noSize
+  transmit cty"f1Terminal Size: "col||"x"||row
+  /* NOTE: If setting term width and height to the user's preferences, you
+     must sanitize the row and col values to between 1 and 127 due to a
+     limitation in C-Net 5.21b. You have been warned ;) */
+  signal bye
+
+noAnsi:
+  /* No ANSI or RIP detected. NOTE: if need access to global variables,
+     expose them in detectAnsiRip() */
+  transmit "Neither Ansi nor RIP found."
+  signal bye
+
+strangeReply:
+  /* Strange reponse from terminal or stray user input interfered with
+     detection. NOTE: if need access to global variables, expose them
+     in detectAnsiRip() */
+  transmit "Strange reply from terminal: "
+  do i=1 to length(termReply)
+    sendstring "0x"||c2x(substr(termReply, i, 1))||" "
+  end
+  transmit
+  transmit "Please notify "author" at "hq" of this result and what terminal program you are using."
+  signal bye
+
+noSize:
+  /* Terminal size was not determined. NOTE: if need access to global
+     variables, expose them in detectAnsiRip() AND detectScreen() */
+  transmit cty"f1Terminal size not determined."
+  signal bye
+
 
 /* Procedures *************************************************************/
 
-/* Ask the user's terminal if it supports ANSI or RIP and return the 
+/* Ask the user's terminal if it supports ANSI or RIP and return the
    terminal's response */
-askTerm: procedure expose esc cty CR delaytime
-	/* syncterm blackout and added CR for console when viewing user */
-	bufferflush;sendmodem esc"30m"esc"!"esc"6n"esc"0m";sendstring CR
-	termReply = ""
-	call time("r")
-	do until io==1
-	  checkio; io=result
-	  if time("e")>delaytime then do signal noAnsi
-	end
-	do until termReply~="" & io==0
-	  checkio; io=result
-	  if io==1 then do
-	    getchar; ans=result; call check(ans)
-	    termReply = termReply||ans
-	    call time('r')
-	  end
-	  else if time('e')>delaytime then signal noAnsi
-	end
-	bufferflush
-return termReply
-
-detectAnsi: procedure expose esc cty author hq delaytime
-  parse arg termReply
-  
-	/* The search for 0x2b ("+") is from the original RIPDetect source. I'm not
-	   sure why this is done. Possibly as a way to bypass the ANSI detect by
-	   typing "+" while its detecting. */
-	if index(termReply, "2b"x)>0 then signal noAnsi
-	else if index(termReply, "RIPSCRIP")>0 then do
-	  sendstring "RIP Terminal Detected"
-	  /* do RIP stuff here as needed */
-	  signal bye
-	end
-	else if index(termReply, "1b5b"x)>0 then do
-	  transmit "ANSI Terminal Detected!"
-	  /* do ANSI stuff here */
-	  transmit "Detecting Terminal Size..."
-	  call delay(25) /* this delay is just for display purposes */
-	  parse value detectScreen() with . "[" row ";" col "R" .
-	  if row=="" | col=="" then signal noSize
-	  transmit cty"f1Terminal Size: "col||"x"||row
-	  /* NOTE: If setting term width and height to the user's preferences, you
-	     must sanitize the row and col values to between 1 and 127 due to a
-	     limitation in C-Net 5.21b. You have been warned ;) */
-	  signal bye
-	end
-	else do
-	  transmit "Strange reply from terminal: "
-	  do i=1 to length(termReply)
-	    sendstring "0x"||c2x(substr(termReply, i, 1))||" "
-	  end
-	  transmit
-	  transmit "Please notify "author" at "hq" of this result and what terminal program you are using."
-	  signal bye
-	end
+detectAnsiRip: procedure expose esc cty CR author hq delaytime
+  /* syncterm blackout and added CR for console when viewing user */
+  bufferflush;sendmodem esc"30m"esc"!"esc"6n"esc"0m";sendstring CR
+  termReply = ""
+  call time("r")
+  do until io==1
+    checkio; io=result
+    if time("e")>delaytime then do signal noAnsi
+  end
+  do until termReply~="" & io==0
+    checkio; io=result
+    if io==1 then do
+      getchar; ans=result; call check(ans)
+      termReply = termReply||ans
+      call time('r')
+    end
+    else if time('e')>delaytime then signal noAnsi
+  end
+  bufferflush
+  /* The search for 0x2b ("+") is from the original RIPDetect source. I'm not
+     sure why this is done. Possibly as a way to bypass the ANSI detect by
+     typing "+" while its detecting. */
+  if index(termReply, "2b"x)>0 then signal noAnsi
+  else if index(termReply, "RIPSCRIP")>0 then signal ripDetected
+  else if index(termReply, "1b5b"x)>0 then signal ansiDetected
+  else signal strangeReply
 return
 
 /* Detect user's terminal rows and columns up to max 300 x 400
