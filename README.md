@@ -20,4 +20,4 @@ Inspired by RIPDetect by Leo Anderson Jr. (Kicker) 15-Nov-95 (http://aminet.net/
 
 #### Use at your own risk.   
 **************************************************************************
-<p align="right">-X-caliber BBS [telnet://bbs.aholix.net:6800]</p>
+<p align="right"><strong>-X-caliber BBS [telnet://bbs.aholix.net:6800]</strong></p>
