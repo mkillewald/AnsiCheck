@@ -18,6 +18,6 @@ Inspired by RIPDetect by Leo Anderson Jr. (Kicker) 15-Nov-95 (http://aminet.net/
 &nbsp;&nbsp;&nbsp;&nbsp;RIPtel64 3.1 (Win10)   
 &nbsp;&nbsp;&nbsp;&nbsp;Syncterm 1.0 (Win10), 1.0b (macOS), 1.1b (Linux 64)   
 
-Use at your own risk.   
+#### Use at your own risk.   
 **************************************************************************
 ### -X-caliber BBS   [telnet://bbs.aholix.net:6800]
