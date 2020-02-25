@@ -1,4 +1,4 @@
-# AnsiCheck v1.1.5
+# AnsiCheck v1.1.6
 ### An ANSI detect routine with terminal size detect written in ARexx for C-Net Amiga 5.21b that minimizes stray user input during detection 
 
 Inspired by RIPDetect by Leo Anderson Jr. (Kicker) 15-Nov-95 (http://aminet.net/package/comm/cnet/RIPdetect)
