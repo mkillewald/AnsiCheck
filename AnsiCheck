@@ -1,5 +1,5 @@
 /**************************************************************************\
-$VER: AnsiCheck, v1.1.6 (Feb-24-2020) by k1ds3ns4t10n of -X-caliber BBS
+$VER: AnsiCheck, v1.1.6 (Feb-25-2020) by k1ds3ns4t10n of -X-caliber BBS
 \**************************************************************************/
 options results;signal on SYNTAX;signal on ERROR;signal on IOERR
 parse value sourceline(2) with " "title", "ver" ("vdate") by "author" of "hq" ".
